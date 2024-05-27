@@ -33,7 +33,7 @@ public:
        }
        
        ListNode* h=head;
-       for(int i=1; i<=jump-1; i++){
+       for(int i=1; i<jump; i++){
         h=h->next;
        }
        return h;
