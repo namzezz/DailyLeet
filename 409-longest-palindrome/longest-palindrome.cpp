@@ -13,7 +13,10 @@ public:
             }
             
         }
-
+        
+        // If there are characters with odd frequencies, we are
+        // guaranteed to have at least one letter left unmatched,
+        // which can make the center of an odd length palindrome.
         if(oddCnt>1){
             return s.length()-oddCnt+1;
         }else{
