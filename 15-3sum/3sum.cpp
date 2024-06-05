@@ -17,9 +17,9 @@ public:
                 int sum = arr[i] + arr[j] + arr[k];
                 if (sum < 0) {
                     j++;
-            }else if(sum>0) {
+                }else if(sum>0) {
                     k--;
-            }else{
+                }else{
                     vector<int> temp = {arr[i], arr[j], arr[k]};
                     ans.push_back(temp);
 
@@ -30,7 +30,7 @@ public:
                         j++;
                     while (j < k && arr[k] == arr[k + 1])
                         k--;
-            }
+                }
             }
         }
         return ans;
