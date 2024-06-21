@@ -1,29 +1,30 @@
 class Solution {
 public:
     int maxSatisfied(vector<int>& customers, vector<int>& grumpy, int minutes) {
-        int sum = 0;
-        for (int i = 0; i < customers.size(); i++) {
+        int initialSatisfaction = 0;
+        int maxExtraSatisfaction = 0;
+        int currentWindowSatisfaction = 0;
+
+        for (int i = 0; i < customers.size(); ++i) {
             if (grumpy[i] == 0) {
-                sum += customers[i];
+                initialSatisfaction += customers[i];
+            } else if (i < minutes) {
+                currentWindowSatisfaction += customers[i];
             }
         }
 
-        int maxsum = 0;
-        int rsum = 0;
+        maxExtraSatisfaction = currentWindowSatisfaction;
 
-        for (int i = 0; i <= customers.size() - minutes; i++) {
-            for (int j = i; j < i + minutes; j++) {
-                //if he wasnt grumpy at this index then additional sum ye hota
-                if (grumpy[j] == 1) {
-                    rsum += customers[j];
-                }
-            }
-            if (rsum > maxsum) {
-                maxsum = rsum;
-            }
-            rsum = 0;
+        for (int i = minutes; i < customers.size(); ++i) {
+            currentWindowSatisfaction += customers[i] * grumpy[i];
+            // take care of duplicates when sliding window, for eg in
+            // 1,2,3,4,5,6 if we calculate till i=2 that is 1,2,3 and move
+            // window to right by 1 index then 2,3,4 will be in the window but
+            // the sum of 2 and 3 might have already be added
+            currentWindowSatisfaction -= customers[i - minutes] * grumpy[i - minutes];
+            maxExtraSatisfaction = max(maxExtraSatisfaction, currentWindowSatisfaction);
         }
 
-        return sum + maxsum;
+        return initialSatisfaction + maxExtraSatisfaction;
     }
 };
