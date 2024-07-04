@@ -14,8 +14,6 @@ public:
         int n = isConnected.size();
         vector<int> vis(n,0);
         int province = 0;
-        vector<int> df;
-        int start = 0;
 
         for (int i = 0; i < n; ++i) {
             if (!vis[i]) {
