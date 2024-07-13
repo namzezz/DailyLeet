@@ -4,50 +4,39 @@ using namespace std;
 
 class Solution {
 private: 
-    bool dfs(int node, vector<vector<int>> &adj, vector<int> &vis, vector<int> &pathVis, stack<int> &st){
-        vis[node] = 1;
-        pathVis[node] = 1;
-        
-        for(auto it : adj[node]){
-            if(!vis[it]){
-                if(dfs(it, adj, vis, pathVis, st) == true){
-                    return true;
-                }
-            }else if(pathVis[it]){
-                return true;
-            }
-        }
-
-        pathVis[node] = 0;
-        st.push(node);
-        return false;
-    }
+    
 public:
     vector<int> findOrder(int numCourses, vector<vector<int>>& prerequisites) {
         vector<vector<int>> adj(numCourses);
-
-        for(auto& pre : prerequisites){
+        vector<int> inDegree(numCourses, 0);
+        
+        for (auto& pre : prerequisites) {
             adj[pre[1]].push_back(pre[0]);
+            inDegree[pre[0]]++;
         }
-
-        vector<int> vis(numCourses, 0);
-        vector<int> pathVis(numCourses, 0);
-        stack<int> st;
-        vector<int> ans;
-
-        for(int i = 0 ; i < numCourses ; i++){
-            if(!vis[i]){
-                if(dfs(i, adj, vis, pathVis, st) == true){
-                    return {};
+        
+        queue<int> q;
+        for (int i = 0; i < numCourses; i++) {
+            if (inDegree[i] == 0) {
+                q.push(i);
+            }
+        }
+        
+        vector<int> topo;
+        while (!q.empty()) {
+            int node = q.front();
+            q.pop();
+            topo.push_back(node);
+            
+            for (auto& it : adj[node]) {
+                inDegree[it]--;
+                if (inDegree[it] == 0) {
+                    q.push(it);
                 }
             }
         }
-
-        while(!st.empty()){
-            ans.push_back(st.top());
-            st.pop();
-        }
-
-        return ans;
+    
+        if(topo.size() == numCourses) return topo;
+        return {};
     }
 };
